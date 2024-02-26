@@ -322,8 +322,33 @@ exports.sendPushNotifications = sendPushNotifications;
 function sendIOSPush (notificationToken, payload, certFileName, certPassword, sendSynchronously, useProdAPNS) {
     if (! certFileName) certFileName = null;
     if (! certPassword) certPassword = null;
-    if (! payload.ios)
-        payload = {ios:payload};
+    if (! payload.ios) {
+        payload = {ios: payload};
+
+        if (payload.ios['apns-topic']) {
+            payload['apns-topic'] = payload.ios['apns-topic'];
+        } else if (payload.ios.aps['apns-topic']) {
+            payload['apns-topic'] = payload.ios.aps['apns-topic'];
+        }
+
+        if (payload.ios['apns-push-type']) {
+            payload['apns-push-type'] = payload.ios['apns-push-type'];
+        } else if (payload.ios.aps['apns-push-type']) {
+            payload['apns-push-type'] = payload.ios.aps['apns-push-type'];
+        }
+
+        if (payload.ios['apns-priority']) {
+            payload['apns-priority'] = payload.ios['apns-priority'];
+        } else if (payload.ios.aps['apns-priority']) {
+            payload['apns-priority'] = payload.ios.aps['apns-priority'];
+        }
+
+        if (payload.ios['apns-expiration']) {
+            payload['apns-expiration'] = payload.ios['apns-expiration'];
+        } else if (payload.ios.aps['apns-expiration']) {
+            payload['apns-expiration'] = payload.ios.aps['apns-expiration'];
+        }
+    }
 
     if (sendSynchronously) {sendSynchronously = true;} else {sendSynchronously = false;}
 
